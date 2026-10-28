@@ -1,0 +1,87 @@
+{% extends "finanzas/base.html" %}
+
+{% block content %}
+<div class="resumen">
+    <div class="tarjeta">
+        <h3>Ingresos</h3>
+        <div class="cifra ingreso">${{ total_ingresos }}</div>
+    </div>
+    <div class="tarjeta">
+        <h3>Gastos</h3>
+        <div class="cifra gasto">${{ total_gastos }}</div>
+    </div>
+    <div class="tarjeta">
+        <h3>Balance</h3>
+        <div class="cifra {% if balance >= 0 %}positivo{% else %}negativo{% endif %}">${{ balance }}</div>
+    </div>
+</div>
+
+<div class="caja">
+    <h2>Gasto por categoría</h2>
+    <ul>
+        {% for g in gastos_por_categoria %}
+            <li>{{ g.categoria__nombre }}: ${{ g.total }}</li>
+        {% empty %}
+            <li>Sin gastos para mostrar</li>
+        {% endfor %}
+    </ul>
+</div>
+
+<div class="caja">
+    <form method="get" class="filtros">
+        <select name="mes">
+            <option value="">Todos los meses</option>
+            {% for m in meses %}
+                <option value="{{ m|date:'Y-m' }}" {% if m|date:'Y-m' == mes_seleccionado %}selected{% endif %}>
+                    {{ m|date:"F Y" }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <select name="categoria">
+            <option value="">Todas las categorías</option>
+            {% for c in categorias %}
+                <option value="{{ c.pk }}" {% if c.pk|stringformat:"s" == categoria_seleccionada %}selected{% endif %}>
+                    {{ c.nombre }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <button type="submit">Filtrar</button>
+        <a class="boton gris" href="{% url 'lista' %}">Limpiar</a>
+        <a class="boton" href="{% url 'crear' %}">+ Nuevo movimiento</a>
+    </form>
+</div>
+
+<div class="tabla-wrapper">
+    <table>
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Tipo</th>
+                <th>Categoría</th>
+                <th>Descripción</th>
+                <th>Monto</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for movimiento in movimientos %}
+                <tr class="{{ movimiento.tipo }}">
+                    <td>{{ movimiento.fecha }}</td>
+                    <td>{{ movimiento.get_tipo_display }}</td>
+                    <td>{{ movimiento.categoria }}</td>
+                    <td>{{ movimiento.descripcion }}</td>
+                    <td class="monto">${{ movimiento.monto }}</td>
+                    <td>
+                        <a href="{% url 'editar' movimiento.pk %}">Editar</a>
+                        <a class="borrar" href="{% url 'borrar' movimiento.pk %}">Borrar</a>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr><td colspan="6" class="vacio">¡Vaya! No hay movimientos</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

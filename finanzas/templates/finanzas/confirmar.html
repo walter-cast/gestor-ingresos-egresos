@@ -1,0 +1,13 @@
+{% extends "finanzas/base.html" %}
+
+{% block content %}
+<div class="caja">
+    <h2>¿Seguro que quieres borrar este movimiento?</h2>
+    <p>{{ movimiento.get_tipo_display }}: ${{ movimiento.monto }} ({{ movimiento.fecha }})</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="peligro">Sí, borrar</button>
+        <a class="boton gris" href="{% url 'lista' %}">Cancelar</a>
+    </form>
+</div>
+{% endblock %}

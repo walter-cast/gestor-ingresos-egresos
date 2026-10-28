@@ -1,0 +1,13 @@
+{% extends "finanzas/base.html" %}
+
+{% block content %}
+<div class="caja formulario">
+    <h2>Movimiento</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Guardar</button>
+        <a class="boton gris" href="{% url 'lista' %}">Cancelar</a>
+    </form>
+</div>
+{% endblock %}
