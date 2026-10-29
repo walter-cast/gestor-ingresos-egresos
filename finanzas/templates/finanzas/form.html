@@ -2,7 +2,7 @@
 
 {% block content %}
 <div class="caja formulario">
-    <h2>Movimiento</h2>
+    <h2>{{ titulo|default:"Movimiento" }}</h2>
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}

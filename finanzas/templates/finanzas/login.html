@@ -1,0 +1,13 @@
+{% extends "finanzas/base.html" %}
+
+{% block content %}
+<div class="caja formulario">
+    <h2>Iniciar sesión</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Entrar</button>
+        <a class="boton gris" href="{% url 'registro' %}">Crear cuenta</a>
+    </form>
+</div>
+{% endblock %}
